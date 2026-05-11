@@ -67,7 +67,8 @@ const NewsSchema = new mongoose.Schema(
 );
 
 // Auto-generate slug from title
-NewsSchema.pre('save', function (next) {
+// Use synchronous pre hook (no callback) to avoid middleware "next is not a function" issues
+NewsSchema.pre('save', function () {
   if (this.isModified('title')) {
     this.slug = this.title
       .toLowerCase()
@@ -75,7 +76,6 @@ NewsSchema.pre('save', function (next) {
       .replace(/\s+/g, '-')
       .substring(0, 60);
   }
-  next();
 });
 
 export default mongoose.model('News', NewsSchema);

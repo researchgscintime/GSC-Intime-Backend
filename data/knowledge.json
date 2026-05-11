@@ -1,0 +1,189 @@
+{
+  "company_info": {
+    "name": "GSC Intime Services Pvt. Ltd.",
+    "tagline": "Indirect Tax Redefined",
+    "founded_year": 2010,
+    "total_experience": "100+ years of combined expertise",
+    "litigation_success_ratio": "90%",
+    "coverage": "360° Indirect Tax Coverage"
+  },
+  "core_philosophy": {
+    "ethos": "We go beyond standard compliance by providing proactive foresight and resilient legal strategies.",
+    "approach": "Engineering-led financial clarity and litigation-proof frameworks."
+  },
+  "services": [
+    {
+      "id": "gst",
+      "title": "GST Advisory & Compliance",
+      "details": "End-to-end support for Goods and Services Tax, from registration to complex litigation."
+    },
+    {
+      "id": "corporate_retainership",
+      "title": "Corporate Retainerships",
+      "summary": "Customized retainership plans for corporates needing reliable indirect tax support.",
+      "description": "The ambit of indirect taxes is widening in breadth and depth. Exemptions are gradually vanishing, more goods and services are being covered in the tax net, and compliance requirements together with departmental enquiries are increasing every day. In such a scenario, corporates require strong and reliable support to provide knowledge, clarity, and solutions.",
+      "highlights": [
+        "Registrations",
+        "Payments",
+        "Records",
+        "Returns",
+        "Adjudication",
+        "Assessments",
+        "Audits",
+        "Appeals"
+      ],
+      "note": "GSC's client-friendly approach has consistently been appreciated by retainership clients."
+    },
+    {
+      "id": "tax_structuring_optimization",
+      "title": "Tax Structuring / Optimization",
+      "summary": "Holistic transaction analysis to minimize multiplicity and volume of indirect taxes.",
+      "description": "Due to the complexity of tax statutes, many transactions attract multiple indirect taxes. The indirect tax cost in a transaction can range from 5% to 18% of gross turnover. Proper planning helps minimize the multiplicity and volume of taxes, while appropriate structuring can reduce the value subjected to tax and improve credits and incentives.",
+      "highlights": [
+        "Transaction structuring",
+        "Tax incidence reduction",
+        "Credit and incentive optimization",
+        "Cross-sector and multi-tax analysis"
+      ],
+      "note": "GSC's consulting background and focus only on indirect taxes makes it uniquely positioned for efficient tax optimization."
+    },
+    {
+      "id": "opinions_notes",
+      "title": "Opinions / Notes",
+      "summary": "Clear guidance on tax applicability, exemptions, and compliance obligations.",
+      "description": "With GST, indirect taxes are omnipresent in nearly every business transaction. It is important to know the implications beforehand so that vital business decisions can be taken with confidence and undue penal consequences can be avoided.",
+      "highlights": [
+        "Applicability of taxes",
+        "Exemptions and concessions",
+        "Conditions attached to exemptions",
+        "Compliance requirements"
+      ],
+      "note": "GSC provides the right advice at the right time."
+    },
+    {
+      "id": "corporate_trainings",
+      "title": "Corporate Trainings",
+      "summary": "Indirect tax training programs that build tax discipline across all levels.",
+      "description": "Developing best corporate practices is essential for tax discipline. Indirect tax corporate trainings help the workforce at different levels gain knowledge and motivation to achieve the highest level of compliance. Adequate training reduces time involvement, avoids chaotic conditions, bridges compliance gaps, and helps prevent unwarranted penalties or loss of credits.",
+      "highlights": [
+        "Easy-to-understand language",
+        "Systematic logical flow",
+        "PowerPoint presentations",
+        "Video clips",
+        "Practical exercises"
+      ],
+      "note": "GSC also explains the various nuances of the subject beyond conceptual clarity."
+    },
+    {
+      "id": "refunds",
+      "title": "Refunds",
+      "summary": "Guidance and field-level support for incentives and tax refunds/rebates.",
+      "description": "There are various incentives and refunds or rebates available under Central and State statutes and schemes. Corporates may need detailed guidance backed by field-level support. GSC provides broad awareness notes, case-specific eligibility studies, and procedural notes to help corporates understand and realize such incentives.",
+      "highlights": [
+        "Eligibility studies",
+        "Procedural guidance",
+        "Pillar-to-post support",
+        "Documentation and follow-ups",
+        "Liaisoning for sanction"
+      ],
+      "note": "GSC maintains a high success rate in obtaining refunds through success-based and cost-effective propositions."
+    },
+    {
+      "id": "litigation_support",
+      "title": "Litigation Support",
+      "summary": "End-to-end support for complex Customs, GST, and Stamp Duty litigation matters.",
+      "description": "Litigations under Customs, GST laws, and Stamp Duty are increasing in number and complexity due to stringent tax provisions, fiddly compliances, and frequent amendments. Such sensitive matters need to be handled by experts. GSC has decades of experience in Indian indirect tax laws and a strong track record in litigation matters.",
+      "highlights": [
+        "Departmental enquiries and investigations",
+        "Special Valuation Branch (SVB) cases",
+        "Departmental audits",
+        "Adjudication (Show Cause Notice)",
+        "Appeals",
+        "Writ petitions"
+      ],
+      "solutions": [
+        {
+          "title": "Pre-litigation support",
+          "description": "Identifying probable litigation areas early, highlighting industry-wide issues proactively, and making representations at the enquiry level to avoid disputes."
+        },
+        {
+          "title": "Litigation strategy",
+          "description": "Assisting organizations with cost-benefit analysis, pros and cons of litigation, and choosing the appropriate litigation approach."
+        },
+        {
+          "title": "Indirect tax litigation support",
+          "description": "Providing practical advice, helping litigate matters end-to-end, appointing counsels, briefing them, drafting submissions, following up, and keeping clients updated."
+        },
+        {
+          "title": "Due diligence",
+          "description": "Verifying documentation and current litigation status during mergers, acquisitions, or restructurings, and providing second opinions on court proceedings."
+        }
+      ]
+    },
+    {
+      "id": "multistate_gst",
+      "title": "Multistate GST",
+      "summary": "One-stop GST support across India for multi-location businesses.",
+      "description": "In India, a business entity must take registration in each State from which it makes supplies. As a result, it has to follow various compliances, assessments, appeals, and other activities for each registration. Continuous amendments in the Central GST law and corresponding State GST implementation make compliance difficult for multi-locational companies.",
+      "highlights": [
+        "Dedicated in-house GST experts",
+        "Tie-ups with local consultants across 50+ locations",
+        "Single point of coordination",
+        "Reduced communication gaps",
+        "Lower time and cost",
+        "Optimum productivity"
+      ]
+    },
+    {
+      "id": "erp_implementation_review",
+      "title": "ERP Implementation / Review",
+      "summary": "Indirect tax support during ERP configuration and review.",
+      "description": "Proper compliance, complete integration, real-time information, adequate internal controls, and timely reporting of all units are key objectives of introducing ERP. If configuration is not done with utmost care and planning, it may become a highly paid disaster. GSC supports ERP implementation from an indirect tax standpoint with knowledge of documentation, logical planning, and awareness of risk areas.",
+      "highlights": [
+        "Compliance alignment",
+        "Process integration",
+        "Risk area awareness",
+        "Documentation support"
+      ]
+    },
+    {
+      "id": "tax_reviews_due_diligence",
+      "title": "Tax Reviews / Due Diligence",
+      "summary": "Periodical reviews to pre-empt defaults, gaps, and missed credits.",
+      "description": "Laws constantly evolve, and with them the resultant complexities. In the era of increasing compliances and tax disputes, it is essential to pre-empt possibilities of defaults. Periodic reviews help ensure that top management tax policies are implemented at all levels, identify compliance gaps, and explore additional credits, refunds, and incentives.",
+      "highlights": [
+        "Corporate tax policy implementation",
+        "Compliance gap analysis",
+        "Tax credit optimization",
+        "Refund and incentive opportunities",
+        "Systems improvement recommendations"
+      ],
+      "note": "GSC's review tools help management rest assured about due diligence and tax optimization."
+    },
+    {
+      "id": "representation_to_government",
+      "title": "Representation to the Government",
+      "summary": "Industry and trade representations for amendments, clarifications, and policy relief.",
+      "description": "At times, policies or confusion in law create undesired impediments to business activities. Instead of dragging the whole industry into disputes, representations should be made to the Government to obtain relevant amendments or clarifications from Tax Authorities. Industry representations are the means to secure such clarifications or changes.",
+      "highlights": [
+        "Industry representation drafting",
+        "Trade association support",
+        "Policy clarification requests",
+        "Amendment submissions",
+        "Forum-level advocacy"
+      ],
+      "note": "GSC helps industrial and trade associations present their stands effectively before the Government."
+    },
+    {
+      "id": "customs",
+      "title": "Customs & Foreign Trade",
+      "details": "Navigating international trade laws, duty structures, and cross-border compliance."
+    },
+    {
+      "id": "advisory",
+      "title": "Strategic Advisory",
+      "details": "High-level consulting for business restructuring and tax optimization with over 20,000 cases handled."
+    }
+  ],
+  "global_reach": "Served clients in 10+ countries served globally."
+}

@@ -2,6 +2,7 @@ import express from 'express';
 import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2Client } from "../config/s3.js";
+import { runAutoFetchAndGenerateNews } from '../services/autoFetchRunner.js';
 
 const router = express.Router();
 
@@ -76,3 +77,13 @@ router.post('/generate-upload-urls', verifyAdminKey, async (req, res) => {
 });
 
 export default router;
+
+// Admin on-demand trigger
+router.post('/run-fetch', verifyAdminKey, async (req, res) => {
+  try {
+    const result = await runAutoFetchAndGenerateNews();
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to run fetch', details: err.message });
+  }
+});

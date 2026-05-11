@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Parser from 'rss-parser';
 
 /**
  * News Fetching Service
@@ -77,18 +78,59 @@ const mockNewsData = {
  * Fetch news from external sources
  * Can be extended with real API integrations
  */
+/**
+ * Fetch news from configured RSS feeds (set NEWS_RSS_FEEDS env var as JSON)
+ * Example: export NEWS_RSS_FEEDS='{"GST":["https://example.com/gst.rss"],"Customs":["https://example.com/customs.rss"]}'
+ * If no RSS config is provided, falls back to mock data.
+ */
 export const fetchNewsFromSources = async () => {
   try {
-    const fetchedNews = [];
+    const rssConfig = process.env.NEWS_RSS_FEEDS;
+    if (!rssConfig) {
+      // No external feeds configured; return mock data
+      return mockNewsData;
+    }
 
-    // Example: Fetch from Google News API (requires API key)
-    // You can implement this by registering for Google News API
+    let feedsMap;
+    try {
+      feedsMap = JSON.parse(rssConfig);
+    } catch (err) {
+      console.error('Invalid NEWS_RSS_FEEDS JSON:', err.message);
+      return mockNewsData;
+    }
 
-    // Example: Fetch from custom news sources via web scraping
-    // Consider using libraries like cheerio or puppeteer
+    const parser = new Parser();
+    const result = {};
 
-    // For now, return mock data
-    return mockNewsData;
+    // For each category, fetch all configured feeds and merge items
+    for (const [category, urls] of Object.entries(feedsMap)) {
+      result[category] = [];
+      if (!Array.isArray(urls)) continue;
+
+      for (const url of urls) {
+        try {
+          const feed = await parser.parseURL(url);
+          if (feed && Array.isArray(feed.items)) {
+            for (const item of feed.items) {
+              result[category].push({
+                title: item.title || item.pubDate || 'Untitled',
+                description: item.contentSnippet || item.summary || '',
+                content: item.content || item['content:encoded'] || '',
+                source: feed.title || (new URL(url)).hostname,
+                sourceUrl: item.link || url,
+                tags: [],
+              });
+            }
+          }
+        } catch (err) {
+          console.error(`Failed to fetch/parse RSS feed ${url}:`, err.message);
+        }
+      }
+    }
+
+    // If nothing was fetched, fall back to mock
+    const anyFetched = Object.values(result).some(arr => Array.isArray(arr) && arr.length > 0);
+    return anyFetched ? result : mockNewsData;
   } catch (error) {
     console.error('Error fetching news from sources:', error);
     return mockNewsData;
