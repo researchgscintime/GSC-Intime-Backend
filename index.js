@@ -10,6 +10,8 @@ import categoryRoutes from './routes/categories.js';
 import newsRoutes from './routes/news.js';
 import adminRoutes from './routes/admin.routes.js';
 import contactRoutes from './routes/contact.routes.js';
+import blogRoutes from './routes/blog.js';
+import googleSearchRoutes from './routes/googleSearch.js';
 
 // Import services
 import { fetchNewsFromSources, enrichNewsData } from './services/newsFetcher.js';
@@ -57,6 +59,8 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/news', newsRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/google-search', googleSearchRoutes);
 console.error('[APP] About to mount chat routes...');
 app.use('/api/chat', chatRoutes);
 console.error('[APP] Chat routes mounted successfully!');
