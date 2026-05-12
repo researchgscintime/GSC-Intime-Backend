@@ -60,28 +60,22 @@ const fetchFeed = async (source) => {
 
 // POST /api/google-search — fetch from RSS feeds, filter by keyword + date
 router.post('/', verifyAdminKey, async (req, res) => {
-  const { query = '', dateRange = 'today' } = req.body;
+  const { query = '', dateRange = 'all' } = req.body;
 
-  const cutoffMs = DATE_RANGE_MS[dateRange] || DATE_RANGE_MS.today;
-  const cutoffDate = new Date(Date.now() - cutoffMs);
+  const cutoffMs = DATE_RANGE_MS[dateRange];
+  const cutoffDate = cutoffMs ? new Date(Date.now() - cutoffMs) : null;
 
   try {
     // Fetch all feeds in parallel
     const allResults = (await Promise.all(RSS_SOURCES.map(fetchFeed))).flat();
 
-    const keywords = query.toLowerCase().split(/\s+/).filter(Boolean);
-
+    // Only apply date filter server-side; keyword filtering happens on the client
     const filtered = allResults.filter((item) => {
-      // Date filter
-      if (item.pubDate) {
+      if (cutoffDate && item.pubDate) {
         const pub = new Date(item.pubDate);
         if (!isNaN(pub) && pub < cutoffDate) return false;
       }
-
-      // Keyword filter (show all if no query)
-      if (keywords.length === 0) return true;
-      const haystack = `${item.title} ${item.snippet}`.toLowerCase();
-      return keywords.some((kw) => haystack.includes(kw));
+      return true;
     });
 
     // Sort all results newest first
