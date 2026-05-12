@@ -1,6 +1,8 @@
 import express from 'express';
+import Parser from 'rss-parser';
 
 const router = express.Router();
+const rssParser = new Parser({ timeout: 8000 });
 
 const verifyAdminKey = (req, res, next) => {
   const adminKey = req.headers['x-admin-key'] || req.body?.adminKey;
@@ -10,66 +12,88 @@ const verifyAdminKey = (req, res, next) => {
   next();
 };
 
-const detectFileType = (item) => {
-  const url = (item.link || '').toLowerCase();
-  const mime = (item.mime || '').toLowerCase();
-  const fileFormat = (item.fileFormat || '').toLowerCase();
+// Verified working Indian GST / Tax / Finance news RSS feeds (tested May 2026)
+const RSS_SOURCES = [
+  { name: 'Tax Guru',            url: 'https://taxguru.in/feed/' },
+  { name: 'Economic Times Tax',  url: 'https://economictimes.indiatimes.com/wealth/tax/rssfeeds/49780338.cms' },
+  { name: 'Economic Times Top',  url: 'https://economictimes.indiatimes.com/rssfeedstopstories.cms' },
+  { name: 'Live Mint',           url: 'https://www.livemint.com/rss/money' },
+  { name: 'Moneycontrol',        url: 'https://www.moneycontrol.com/rss/latestnews.xml' },
+  { name: 'Hindu Business Line', url: 'https://www.thehindubusinessline.com/feeder/default.rss' },
+  { name: 'NDTV Profit',         url: 'https://feeds.feedburner.com/ndtvprofit-latest' },
+];
 
-  if (mime.includes('pdf') || fileFormat.includes('pdf') || url.endsWith('.pdf')) return 'pdf';
-  if (url.endsWith('.doc') || url.endsWith('.docx') || mime.includes('word') || fileFormat.includes('word')) return 'document';
-  if (url.includes('docs.google.com')) return 'document';
-  if (url.endsWith('.ppt') || url.endsWith('.pptx')) return 'document';
-  if (url.includes('blog') || url.includes('/post/') || url.includes('/article/')) return 'article';
+const DATE_RANGE_MS = {
+  today: 24 * 60 * 60 * 1000,        // 24 hours
+  week:  7  * 24 * 60 * 60 * 1000,   // 7 days
+  month: 30 * 24 * 60 * 60 * 1000,   // 30 days
+};
+
+const detectFileType = (url = '', title = '') => {
+  const u = url.toLowerCase();
+  const t = title.toLowerCase();
+  if (u.endsWith('.pdf') || t.includes('pdf')) return 'pdf';
+  if (u.endsWith('.doc') || u.endsWith('.docx')) return 'document';
+  if (t.includes('circular') || t.includes('notification') || t.includes('order')) return 'pdf';
   return 'article';
 };
 
-// POST /api/google-search — proxy to Google Custom Search JSON API
+// Try fetching a single RSS feed, return [] on any error
+const fetchFeed = async (source) => {
+  try {
+    const feed = await rssParser.parseURL(source.url);
+    const items = (feed.items || []).map((item) => ({
+      title: item.title || '',
+      snippet: item.contentSnippet || item.summary || '',
+      url: item.link || '',
+      displayUrl: source.name,
+      fileType: detectFileType(item.link, item.title),
+      pubDate: item.pubDate || item.isoDate || null,
+    }));
+    console.log(`[RSS] ✅ ${source.name}: ${items.length} items`);
+    return items;
+  } catch (err) {
+    console.log(`[RSS] ❌ ${source.name}: ${err.message}`);
+    return [];
+  }
+};
+
+// POST /api/google-search — fetch from RSS feeds, filter by keyword + date
 router.post('/', verifyAdminKey, async (req, res) => {
-  const { query, num = 10 } = req.body;
+  const { query = '', dateRange = 'today' } = req.body;
 
-  if (!query) {
-    return res.status(400).json({ message: 'Search query is required' });
-  }
-
-  const apiKey = process.env.GOOGLE_API_KEY;
-  const cseId = process.env.GOOGLE_CSE_ID;
-
-  if (!apiKey || !cseId) {
-    return res.status(503).json({
-      message: 'Google Custom Search is not configured. Add GOOGLE_API_KEY and GOOGLE_CSE_ID to your .env file.',
-    });
-  }
+  const cutoffMs = DATE_RANGE_MS[dateRange] || DATE_RANGE_MS.today;
+  const cutoffDate = new Date(Date.now() - cutoffMs);
 
   try {
-    const params = new URLSearchParams({
-      key: apiKey,
-      cx: cseId,
-      q: query,
-      num: Math.min(num, 10),
+    // Fetch all feeds in parallel
+    const allResults = (await Promise.all(RSS_SOURCES.map(fetchFeed))).flat();
+
+    const keywords = query.toLowerCase().split(/\s+/).filter(Boolean);
+
+    const filtered = allResults.filter((item) => {
+      // Date filter
+      if (item.pubDate) {
+        const pub = new Date(item.pubDate);
+        if (!isNaN(pub) && pub < cutoffDate) return false;
+      }
+
+      // Keyword filter (show all if no query)
+      if (keywords.length === 0) return true;
+      const haystack = `${item.title} ${item.snippet}`.toLowerCase();
+      return keywords.some((kw) => haystack.includes(kw));
     });
 
-    const response = await fetch(`https://www.googleapis.com/customsearch/v1?${params}`);
+    // Sort all results newest first
+    filtered.sort((a, b) => {
+      const da = a.pubDate ? new Date(a.pubDate) : new Date(0);
+      const db = b.pubDate ? new Date(b.pubDate) : new Date(0);
+      return db - da;
+    });
 
-    if (!response.ok) {
-      const errBody = await response.json().catch(() => ({}));
-      return res.status(response.status).json({
-        message: errBody?.error?.message || 'Google API error',
-      });
-    }
-
-    const data = await response.json();
-    const items = (data.items || []).map((item) => ({
-      title: item.title,
-      snippet: item.snippet,
-      url: item.link,
-      displayUrl: item.displayLink,
-      fileType: detectFileType(item),
-      thumbnail: item.pagemap?.cse_thumbnail?.[0]?.src || '',
-    }));
-
-    res.json({ items, totalResults: data.searchInformation?.totalResults || 0 });
+    res.json({ items: filtered, totalResults: filtered.length, source: 'rss' });
   } catch (error) {
-    res.status(500).json({ message: 'Error calling Google Search API', error: error.message });
+    res.status(500).json({ message: 'Error fetching news feeds', error: error.message });
   }
 });
 

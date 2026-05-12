@@ -3,6 +3,7 @@ import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { r2Client } from "../config/s3.js";
 import { runAutoFetchAndGenerateNews } from '../services/autoFetchRunner.js';
+import { extract } from '@extractus/article-extractor';
 
 const router = express.Router();
 
@@ -73,6 +74,45 @@ router.post('/generate-upload-urls', verifyAdminKey, async (req, res) => {
     res.json({ uploads });
   } catch (err) {
     res.status(500).json({ error: 'Failed to generate upload URLs' });
+  }
+});
+
+// Fetch full article content from a URL (for RSS import)
+router.post('/fetch-article', verifyAdminKey, async (req, res) => {
+  const { url } = req.body;
+  if (!url) return res.status(400).json({ error: 'URL is required' });
+
+  try {
+    const article = await extract(url, {}, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; GSCIntimeBot/1.0)',
+      },
+    });
+
+    // Strip HTML tags to plain text
+    const stripHtml = (html = '') =>
+      html
+        .replace(/<br\s*\/?>/gi, '\n')
+        .replace(/<\/p>/gi, '\n\n')
+        .replace(/<[^>]+>/g, '')
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+    const textContent = stripHtml(article?.content || '');
+
+    res.json({
+      content: textContent,
+      author: article?.author || '',
+      published: article?.published || null,
+    });
+  } catch (err) {
+    // Return empty — caller will fall back to snippet
+    res.json({ content: '', author: '', published: null });
   }
 });
 

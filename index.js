@@ -12,6 +12,7 @@ import adminRoutes from './routes/admin.routes.js';
 import contactRoutes from './routes/contact.routes.js';
 import blogRoutes from './routes/blog.js';
 import googleSearchRoutes from './routes/googleSearch.js';
+import provisionRoutes from './routes/provisions.js';
 
 // Import services
 import { fetchNewsFromSources, enrichNewsData } from './services/newsFetcher.js';
@@ -61,6 +62,7 @@ app.use('/api/admin', adminRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/google-search', googleSearchRoutes);
+app.use('/api/provisions', provisionRoutes);
 console.error('[APP] About to mount chat routes...');
 app.use('/api/chat', chatRoutes);
 console.error('[APP] Chat routes mounted successfully!');
