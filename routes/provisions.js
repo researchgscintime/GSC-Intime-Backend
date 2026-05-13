@@ -70,7 +70,7 @@ router.post('/generate', verifyAdminKey, async (req, res) => {
 
   try {
     const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const prompt = `You are an expert in Indian GST and tax law. Generate a comprehensive amendment history tracker for the following topic: "${topic}"
 

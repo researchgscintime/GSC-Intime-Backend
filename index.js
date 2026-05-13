@@ -13,6 +13,7 @@ import contactRoutes from './routes/contact.routes.js';
 import blogRoutes from './routes/blog.js';
 import googleSearchRoutes from './routes/googleSearch.js';
 import provisionRoutes from './routes/provisions.js';
+import caseLawRoutes from './routes/caseLaws.js';
 
 // Import services
 import { fetchNewsFromSources, enrichNewsData } from './services/newsFetcher.js';
@@ -39,7 +40,7 @@ const app = express();
 
 // 3. Middleware setup
 app.use(cors()); // Allows our React frontend to securely talk to this server
-app.use(express.json()); // Allows the server to understand JSON data
+app.use(express.json({ limit: '25mb' })); // Allows the server to understand JSON data (25mb for PDF base64 uploads)
 
 // Log all incoming requests
 app.use((req, res, next) => {
@@ -63,6 +64,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/google-search', googleSearchRoutes);
 app.use('/api/provisions', provisionRoutes);
+app.use('/api/case-laws', caseLawRoutes);
 console.error('[APP] About to mount chat routes...');
 app.use('/api/chat', chatRoutes);
 console.error('[APP] Chat routes mounted successfully!');

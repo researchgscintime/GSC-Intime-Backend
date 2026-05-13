@@ -92,7 +92,7 @@ ENGAGEMENT GUIDELINES
       historyCount: historyParts.length,
     })}\n`);
 
-    const modelName = 'gemini-flash-latest';
+    const modelName = 'gemini-2.5-flash';
     fs.appendFileSync(logFile, `[MODEL_NAME] ${modelName}\n`);
     const geminiResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent`, {
       method: 'POST',
